@@ -19,12 +19,12 @@ def hello():
 
 @app.route('/bot', methods=['POST'])
 def bot():
-    incoming_msg = request.values.get('Body', '').lower()
+    incoming_msg = request.values.get('Body', '').lower().strip()
     resp = MessagingResponse()
     msg = resp.message()
     responded = False
 
-    if 'start' in incoming_msg:
+    if 'start' == incoming_msg and responded == False:
         text = f'🤖 Hello!\ni am Bot created by Azzam, how can i help you?\n'\
         '\nCommands are:\n'\
         '\nShorten Url by : url <your link>'\
@@ -37,27 +37,27 @@ def bot():
         msg.body(text)
         responded = True
 
-    if 'url' in incoming_msg:
+    if 'url' == incoming_msg.split(' ')[0] and responded == False:
         text = "Error"
-        url = incoming_msg[4:]
+        url = incoming_msg.split(' ')[1]
         try:
             new_url = url_shortner(url)
-            text = f"URL : {new_url}"
+            text = new_url
         except Exception:
             text = "Sorry, invalid url."
         finally:
             msg.body("URL: " + text)
             responded = True
 
-    if 'joke' in incoming_msg:
+    if 'joke' == incoming_msg and responded == False:
         msg.body("Joke: " + random_joke())
         responded = True
 
-    if 'quote' in incoming_msg:
+    if 'quote' == incoming_msg:
         msg.body("Quote: " + random_quote())
         responded = True
 
-    if 'fibonacci' in incoming_msg:
+    if 'fibonacci' == incoming_msg.split(' ')[0] and responded == False:
         text = "Error"
         try:
             user_int = int(incoming_msg.replace("fibonacci", "").strip())
@@ -67,7 +67,7 @@ def bot():
         msg.body(text)
         responded = True
 
-    if 'youtube' in incoming_msg:
+    if 'youtube' == incoming_msg.split(' ')[0] and responded == False:
         text = "Error"
         try:
             user_input = incoming_msg[7:]
@@ -80,7 +80,7 @@ def bot():
         msg.body(text)
         responded = True
 
-    if 'cat' in incoming_msg:
+    if 'cat' == incoming_msg and responded == False:
         msg.media('https://cataas.com/cat')
         responded = True
 
@@ -92,7 +92,7 @@ def bot():
     #         msg.body("Error")
     #     responded = True
 
-    if 'help' in incoming_msg:
+    if 'help' == incoming_msg and responded == False:
        text = f'Commands are:\n'\
         '\nShorten url by : url <your link>'\
         '\nYoutube searching by : youtube <your keyword>'\
